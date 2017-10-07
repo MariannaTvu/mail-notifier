@@ -1,0 +1,29 @@
+CREATE SCHEMA IF NOT EXISTS `mail-notifier` DEFAULT CHARACTER SET utf8 ;
+USE `mail-notifier` ;
+
+DROP TABLE IF EXISTS `mail-notifier`.`user` ;
+
+CREATE TABLE IF NOT EXISTS `mail-notifier`.`user` (
+  `id`      BIGINT      NOT NULL AUTO_INCREMENT,
+  `name`    VARCHAR(45) NOT NULL,
+  `surname` VARCHAR(45) NOT NULL,
+  `email`   VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`)
+)
+    ENGINE = InnoDB
+  DEFAULT CHARACTER SET = utf8;
+
+
+DROP TABLE IF EXISTS `mail-notifier`.`note` ;
+CREATE TABLE IF NOT EXISTS `mail-notifier`.`note` (
+  `id`      BIGINT      NOT NULL AUTO_INCREMENT,
+  `user_id` BIGINT NOT NULL ,
+  `title`    VARCHAR(45) NOT NULL,
+  `text` VARCHAR(500) NOT NULL,
+  `expire_date`  DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_id`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `mail-notifier`.`user` (`id`))
+  ENGINE = InnoDB
+  DEFAULT CHARACTER SET = utf8;
