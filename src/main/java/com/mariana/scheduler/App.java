@@ -1,4 +1,4 @@
-package com.mariana;
+package com.mariana.scheduler;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,8 +12,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan("com.mariana")
-@EntityScan("com.mariana")
+@ComponentScan("com.mariana.scheduler")
+@EntityScan("com.mariana.scheduler")
 @EnableWebMvc
 @EnableJpaRepositories
 public class App extends SpringBootServletInitializer {

@@ -1,6 +1,6 @@
-package com.mariana.repository;
+package com.mariana.scheduler.repository;
 
-import com.mariana.entity.UserEntity;
+import com.mariana.scheduler.entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
