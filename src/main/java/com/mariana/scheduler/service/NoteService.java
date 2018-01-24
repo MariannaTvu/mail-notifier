@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by nicot on 1/6/2018.
@@ -34,7 +37,7 @@ public class NoteService {
         noteEntity.setUserId(noteDto.getUserId());
         noteEntity.setText(noteDto.getText());
         noteEntity.setTitle(noteDto.getTitle());
-        noteEntity.setExpireDate(LocalDate.parse(noteDto.getExpireDate()));
+        noteEntity.setExpireDate(LocalDateTime.parse(noteDto.getExpireDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         return noteRepository.save(noteEntity);
     }
 

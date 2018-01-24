@@ -1,7 +1,7 @@
 use `mail-notifier`;
 
-insert into `user` (name, surname, email, password) values
-  ('John', 'Johnson', 'nico.tvu@gmail.com', '11');
+insert into `user` (name, surname, email) values
+  ('John', 'Johnson', 'nico.tvu@gmail.com');
 
 insert into `note` (user_id, title, text, expire_date) values
-  (1, 'BD', 'SampletextSampletextSampletexSampletextSampletextSampletextSampletextSampletexSampletextSampletextSampletextSampletextSampletextSampletextSampletextSampletextSampletextSampletext', '2017-07-06 00:26:29');
+  (1, 'BD', 'SampletextextSampletextSampletextSampletextSampletexSampletextSampletextSampletextSampletextSampletextSampletextSampletextSampletextSampletextSampletext', '2017-07-06 00:26:29');

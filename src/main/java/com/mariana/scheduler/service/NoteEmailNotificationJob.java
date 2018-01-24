@@ -11,9 +11,7 @@ import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -27,21 +25,21 @@ import static org.quartz.TriggerBuilder.*;
 @Component
 public class NoteEmailNotificationJob implements Job {
     private final String STANDART_TEMPLATE = "standart_msg.html";
-    private LocalDate TRIGGER_DATE = null;
+    private LocalDateTime TRIGGER_DATE = null;
     private MailSender mailSender = SimpleMailSender.createMailSender();
     private TemplateEngine templateEngine = SimpleTemplateEngine.createTemplateEngine();
 
     public NoteEmailNotificationJob() throws SchedulerException {
     }
 
-    public void setTriggerDate(LocalDate triggerDate) {
+    public void setTriggerDate(LocalDateTime triggerDate) {
         this.TRIGGER_DATE = triggerDate;
     }
     public void execute(JobExecutionContext context) throws JobExecutionException {
        Mail mail = null;
         try {
             mail = (Mail) context.getScheduler().getContext().get("mail");
-            TRIGGER_DATE = (LocalDate) context.getScheduler().getContext().get("date");
+            TRIGGER_DATE = (LocalDateTime) context.getScheduler().getContext().get("date");
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
@@ -65,9 +63,11 @@ sendMail(mail.getUsername(), mail.getTitle(), mail.getText(), mail.getEmail(), m
     }
 
     public SimpleTrigger getTrigger() {
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(TRIGGER_DATE, ZoneId.systemDefault());
+        Instant instant = Instant.from(zonedDateTime);
         return (SimpleTrigger) newTrigger()
                 .withIdentity("trigger1", "group1")
-                .startAt(Date.from(Date.from(Instant.from(TRIGGER_DATE.atStartOfDay(ZoneId.systemDefault()))).toInstant())) // some Date
+                .startAt(Date.from(instant)) // some Date
                 .forJob("job1", "group1") // identify job with name, group strings
                 .build();
     }

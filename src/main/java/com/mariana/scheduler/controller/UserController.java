@@ -10,6 +10,7 @@ import com.mariana.scheduler.repository.NoteRepository;
 import com.mariana.scheduler.repository.UserRepository;
 import com.mariana.scheduler.service.NoteEmailNotificationJob;
 import com.mariana.scheduler.service.NoteService;
+import com.mariana.scheduler.service.UserService;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
@@ -36,6 +37,9 @@ public class UserController {
     @Autowired
     NoteService noteService;
 
+    @Autowired
+    UserService userService;
+
     @RequestMapping("/test")
     public ResponseEntity index() {
         UserEntity userEntity = userRepository.findOne(1L);
@@ -45,7 +49,7 @@ public class UserController {
 
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody UserDto userDto) {
-        userRepository.save(new UserEntity(userDto.getName(), userDto.getSurname(), userDto.getEmail()));
+        userService.save(userDto);
         return new ResponseEntity(HttpStatus.OK);
     }
 

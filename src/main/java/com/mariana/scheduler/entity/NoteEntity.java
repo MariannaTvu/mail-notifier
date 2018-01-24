@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Created by nicot on 10/5/2017.
@@ -23,7 +24,7 @@ public class NoteEntity {
 
     public String title;
 
-    public LocalDate expireDate;
+    public LocalDateTime expireDate;
 
     public Long userId;
 }
