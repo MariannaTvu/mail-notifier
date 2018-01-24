@@ -1,8 +1,10 @@
 package com.mariana.scheduler.controller;
 
+import com.google.gson.Gson;
 import com.mariana.scheduler.entity.NoteEntity;
 import com.mariana.scheduler.entity.UserEntity;
 import com.mariana.scheduler.entity.dto.NoteDto;
+import com.mariana.scheduler.entity.dto.UserDto;
 import com.mariana.scheduler.mail.Mail;
 import com.mariana.scheduler.repository.NoteRepository;
 import com.mariana.scheduler.repository.UserRepository;
@@ -22,10 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController("user")
+@RequestMapping(value = "user", produces = "application/json")
 public class UserController {
-
-
-
 
     @Autowired
     UserRepository userRepository;
@@ -36,37 +36,22 @@ public class UserController {
     @Autowired
     NoteService noteService;
 
-    @Autowired
-    NoteEmailNotificationJob noteJob;
-
-    @RequestMapping("/")
-    public String index() {
+    @RequestMapping("/test")
+    public ResponseEntity index() {
         UserEntity userEntity = userRepository.findOne(1L);
         List<NoteEntity> noteEntities = noteRepository.findByUserId(userEntity.id);
-        return noteEntities.toString();
+        return new ResponseEntity(new Gson().toJson(noteEntities), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity register(@RequestBody UserEntity userEntity) {
-        userRepository.save(userEntity);
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public ResponseEntity register(@RequestBody UserDto userDto) {
+        userRepository.save(new UserEntity(userDto.getName(), userDto.getSurname(), userDto.getEmail()));
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @RequestMapping(value = "note", method = RequestMethod.PUT)
     public ResponseEntity saveNewNote(@RequestBody NoteDto noteDto) {
-        noteService.saveNote(noteDto);
-        Mail mail = new Mail("nico.tvu@gmail.com", "hello", "fff", "dfe", "fefe");
-        noteJob.setTriggerDate("2018-01-07");
-        try {
-            Scheduler scheduler = new StdSchedulerFactory().getScheduler();
-            scheduler.start();
-            scheduler.getContext().put("mail", mail);
-            scheduler.getContext().put("date", "2018-01-07");
-            scheduler.scheduleJob(noteJob.getJob(), noteJob.getTrigger());
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
+        noteService.sceduleReminder(noteService.saveNote(noteDto));
         return new ResponseEntity(HttpStatus.OK);
     }
-
 }

@@ -26,26 +26,21 @@ import static org.quartz.TriggerBuilder.*;
 @Component
 public class NoteEmailNotificationJob implements Job {
     private final String STANDART_TEMPLATE = "standart_msg.html";
-    private String TRIGGER_DATE = null;
+    private LocalDate TRIGGER_DATE = null;
     private MailSender mailSender = SimpleMailSender.createMailSender();
     private TemplateEngine templateEngine = SimpleTemplateEngine.createTemplateEngine();
 
     public NoteEmailNotificationJob() throws SchedulerException {
     }
-
-    public void setTriggerDate(String triggerDate) {
-        this.TRIGGER_DATE = triggerDate;
-    }
     public void execute(JobExecutionContext context) throws JobExecutionException {
        Mail mail = null;
         try {
             mail = (Mail) context.getScheduler().getContext().get("mail");
-            TRIGGER_DATE = (String) context.getScheduler().getContext().get("date");
+            TRIGGER_DATE = (LocalDate) context.getScheduler().getContext().get("date");
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
 sendMail(mail.getUsername(), mail.getTitle(), mail.getText(), mail.getEmail(), mail.getSubject());
-        System.out.println("HIIIIIIIIIIIIIIIII");
     }
 
     public void sendMail(String userName, String title, String text, String email, String subject) {
@@ -67,7 +62,7 @@ sendMail(mail.getUsername(), mail.getTitle(), mail.getText(), mail.getEmail(), m
     public SimpleTrigger getTrigger() {
         return (SimpleTrigger) newTrigger()
                 .withIdentity("trigger1", "group1")
-                .startAt(Date.from(LocalDate.parse(TRIGGER_DATE).atStartOfDay(ZoneId.systemDefault()).toInstant())) // some Date
+                .startAt(Date.from(TRIGGER_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant())) // some Date
                 .forJob("job1", "group1") // identify job with name, group strings
                 .build();
     }

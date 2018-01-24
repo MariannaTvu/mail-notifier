@@ -9,7 +9,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@Data
 public class Mail {
     private String email;
     private String subject;

@@ -3,6 +3,9 @@ package com.mariana.scheduler.entity.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -11,8 +14,13 @@ import java.time.LocalDate;
  * Created by nicot on 1/6/2018.
  */
 @ApiModel
+@Getter
+@Setter
 public class NoteDto {
-    private String text;
+    private final String text;
+    private final String title;
+    private final String expireDate;
+    private final Long userId;
 
     @JsonCreator
     public NoteDto(@JsonProperty("user_id") Long userId,
@@ -23,27 +31,5 @@ public class NoteDto {
         this.title = title;
         this.text = text;
         this.expireDate = expireDate;
-    }
-
-    private String title;
-
-    private String expireDate;
-
-    private Long userId;
-
-    public String getText() {
-        return text;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getExpireDate() {
-        return expireDate;
-    }
-
-    public Long getUserId() {
-        return userId;
     }
 }
