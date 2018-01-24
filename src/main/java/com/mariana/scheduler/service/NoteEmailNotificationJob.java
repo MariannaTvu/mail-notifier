@@ -11,6 +11,7 @@ import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -31,6 +32,10 @@ public class NoteEmailNotificationJob implements Job {
     private TemplateEngine templateEngine = SimpleTemplateEngine.createTemplateEngine();
 
     public NoteEmailNotificationJob() throws SchedulerException {
+    }
+
+    public void setTriggerDate(LocalDate triggerDate) {
+        this.TRIGGER_DATE = triggerDate;
     }
     public void execute(JobExecutionContext context) throws JobExecutionException {
        Mail mail = null;
@@ -62,7 +67,7 @@ sendMail(mail.getUsername(), mail.getTitle(), mail.getText(), mail.getEmail(), m
     public SimpleTrigger getTrigger() {
         return (SimpleTrigger) newTrigger()
                 .withIdentity("trigger1", "group1")
-                .startAt(Date.from(TRIGGER_DATE.atStartOfDay(ZoneId.systemDefault()).toInstant())) // some Date
+                .startAt(Date.from(Date.from(Instant.from(TRIGGER_DATE.atStartOfDay(ZoneId.systemDefault()))).toInstant())) // some Date
                 .forJob("job1", "group1") // identify job with name, group strings
                 .build();
     }

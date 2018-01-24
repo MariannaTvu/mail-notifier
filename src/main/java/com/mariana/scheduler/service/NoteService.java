@@ -45,6 +45,7 @@ public class NoteService {
                 user.getName(),
                 noteEntity.getTitle(),
                 noteEntity.getText());
+                noteJob.setTriggerDate(noteEntity.getExpireDate());
         try {
             Scheduler scheduler = new StdSchedulerFactory().getScheduler();
             scheduler.start();
