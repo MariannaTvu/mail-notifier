@@ -29,25 +29,26 @@ public class NoteEmailNotificationJob implements Job {
     private MailSender mailSender = SimpleMailSender.createMailSender();
     private TemplateEngine templateEngine = SimpleTemplateEngine.createTemplateEngine();
 
-    public NoteEmailNotificationJob() throws SchedulerException {
+    public NoteEmailNotificationJob() {
     }
 
     public void setTriggerDate(LocalDateTime triggerDate) {
         this.TRIGGER_DATE = triggerDate;
     }
+
     public void execute(JobExecutionContext context) throws JobExecutionException {
-       Mail mail = null;
+        Mail mail = null;
         try {
             mail = (Mail) context.getScheduler().getContext().get("mail");
             TRIGGER_DATE = (LocalDateTime) context.getScheduler().getContext().get("date");
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
-sendMail(mail.getUsername(), mail.getTitle(), mail.getText(), mail.getEmail(), mail.getSubject());
+        sendMail(mail.getUsername(), mail.getTitle(), mail.getText(), mail.getEmail(), mail.getSubject());
     }
 
     public void sendMail(String userName, String title, String text, String email, String subject) {
-        String body = templateEngine.build(STANDART_TEMPLATE, new HashMap<String,String>() {{
+        String body = templateEngine.build(STANDART_TEMPLATE, new HashMap<String, String>() {{
             put("name", userName);
             put("title", title);
             put("text", text);

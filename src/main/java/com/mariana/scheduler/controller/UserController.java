@@ -47,7 +47,7 @@ public class UserController {
         return new ResponseEntity(new Gson().toJson(noteEntities), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "register", method = RequestMethod.POST)
+    @RequestMapping(value = "register", method = RequestMethod.PUT)
     public ResponseEntity register(@RequestBody UserDto userDto) {
         userService.save(userDto);
         return new ResponseEntity(HttpStatus.OK);
